@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import UserRegisterForm,UserUpdateForm,ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
 
 def register(request):
     if request.method=='POST':
@@ -34,3 +36,10 @@ def profile(request):
        'p_form':p_form
     }
     return render(request,'users/profile.html',context)
+
+
+@login_required
+def profile_detail(request,username):
+    user = User.objects.filter(username=username).first()
+    context = {'user':user}
+    return render(request,'users/profile_detail.html',context)

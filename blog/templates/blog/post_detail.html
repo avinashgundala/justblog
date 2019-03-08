@@ -4,7 +4,11 @@
       <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}" >
       <div class="media-body">
         <div class="article-metadata">
+          {% if post.author == user %}
           <a class="mr-2" href="{% url 'profile' %}">{{ post.author }}</a>
+          {% else %}
+          <a class="mr-2" href="{% url 'profile-detail' post.author %}">{{ post.author }}</a>
+          {% endif %}
           <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
           {% if post.author == user %}
           <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.id %}">Update</a>
@@ -29,9 +33,12 @@
    <blockquote class="blockquote">
      <img class="rounded-circle article-img" src="{{ comment.author.profile.image.url }}" >
   <p class="mb-0">{{ comment.text }}</p>
-  <footer class="blockquote-footer">by <cite title="Source Title"> {{ comment.author }} </cite></footer>
+  {% if comment.author == user %}
+    <footer class="blockquote-footer">by <cite title="Source Title"> <a href="{% url 'profile' %}"> {{ comment.author }}</a> </cite></footer>
+  {% else %}
+  <footer class="blockquote-footer">by <cite title="Source Title"> <a href="{% url 'profile-detail' comment.author %}"> {{ comment.author }}</a> </cite></footer>
+  {% endif %}
 </blockquote>
-
    {% endfor %}
 
  </div>
