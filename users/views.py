@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import UserRegisterForm,UserUpdateForm,ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from blog.models import Post
 
 
 def register(request):
@@ -41,5 +42,8 @@ def profile(request):
 @login_required
 def profile_detail(request,username):
     user = User.objects.filter(username=username).first()
-    context = {'user':user}
+    posts = Post.objects.filter(author = user).order_by('-date_posted')
+    context = {'user':user,
+              'posts': posts
+               }
     return render(request,'users/profile_detail.html',context)
